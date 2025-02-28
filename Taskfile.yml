@@ -1,0 +1,29 @@
+version: '3'
+
+includes:
+  app:
+    taskfile: ./app/Taskfile.yml
+    dir: ./app
+
+tasks:
+  default:
+    desc: タスク一覧を表示
+    cmds:
+      - task --list
+
+  setup:
+    desc: miseをセットアップし、必要なツールをインストール
+    cmds:
+      - mise install
+
+  update:
+    desc: miseで管理しているすべてのツールを更新
+    cmds:
+      - mise upgrade
+
+  check:
+    desc: miseの設定を確認
+    cmds:
+      - mise list
+      - mise doctor
+

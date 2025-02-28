@@ -1,41 +1,117 @@
-## メモ 最終的にはちゃんと手順として落とし込む
+# DevContainer + mise テンプレート
 
-- 最初の起動時に biome の runtime が見つからないっていうふうにでる
+このリポジトリは、DevContainerを使用した開発環境と、DevContainerを使用しない環境の両方で一貫したツール管理ができるサンプルプロジェクトです。[mise](https://mise.jdx.dev/)を使用することで、どちらの環境でも同じバージョンのツールを使用することができます。
 
-```terminal
+## 特徴
 
-Biome binary found at /workspaces/app-welcome-junior/2025/2213_kugimiya/front/node_modules/.bin/biome
-Executing Biome from: /workspaces/app-welcome-junior/2025/2213_kugimiya/front/node_modules/.bin/biome
-[cli-stderr] data 107
-[cli-stderr] end
-[cli-stderr] finish
-[cli-stdout] end
-[cli-stdout] finish
-[cli] exit 127
-[Error - 3:03:22 AM] Biome client: couldn't create connection to server.
-Error: Command "/workspaces/app-welcome-junior/2025/2213_kugimiya/front/node_modules/.bin/biome __print_socket" exited with code 127
-Output:
-/workspaces/app-welcome-junior/2025/2213_kugimiya/front/node_modules/.bin/biome: 16: exec: node: not found
+- DevContainerによる一貫した開発環境
+- DevContainerを使わない場合でもmiseによるツールバージョン管理
+- Taskfileによる共通タスクの実行
 
-    at n$ (/root/.vscode-server/extensions/biomejs.biome-2.3.2/out/main.js:84:16)
-    at processTicksAndRejections (node:internal/process/task_queues:95:5)
-    at i$ (/root/.vscode-server/extensions/biomejs.biome-2.3.2/out/main.js:84:250)
-    at UQ.createConnection (/root/.vscode-server/extensions/biomejs.biome-2.3.2/out/main.js:39:12709)
-    at UQ.start (/root/.vscode-server/extensions/biomejs.biome-2.3.2/out/main.js:39:2940)
-    at $X (/root/.vscode-server/extensions/biomejs.biome-2.3.2/out/main.js:82:28898)
-    at aw.n (file:///vscode/vscode-server/bin/linux-arm64/e54c774e0add60467559eb0d1e229c6452cf8447/out/vs/workbench/api/node/extensionHostProcess.js:112:4447)
-    at aw.m (file:///vscode/vscode-server/bin/linux-arm64/e54c774e0add60467559eb0d1e229c6452cf8447/out/vs/workbench/api/node/extensionHostProcess.js:112:4410)
-    at aw.l (file:///vscode/vscode-server/bin/linux-arm64/e54c774e0add60467559eb0d1e229c6452cf8447/out/vs/workbench/api/node/extensionHostProcess.js:112:3866)
-[cli-stdout] close
-[cli] close 127
-[cli-stderr] close
+## DevContainerのメリット
+
+- **開発環境の一貫性**: チーム全員が完全に同一の環境で開発できるため、「自分の環境では動くのに」という問題が発生しない
+- **即時開発開始**: リポジトリを開くだけで、前提条件や依存関係のインストールを自動化
+- **環境の分離**: プロジェクトごとに独立した環境のため、依存関係の競合を防止
+- **オンボーディングの効率化**: 新メンバーは複雑な環境構築手順なしで開発を始められる
+- **クリーンなローカル環境**: ホストマシンに開発ツールをインストールする必要がない
+- **GitHub Codespacesとの連携**: クラウド開発環境にもシームレスに対応
+- **本番環境との類似性**: コンテナベースの開発で本番環境との差異を最小化
+
+## miseとの連携のメリット
+
+- **ツール管理の一元化**: DevContainerの内外で同じ`.mise.toml`を使用
+- **柔軟な開発スタイル**: DevContainerを使いたい人も使いたくない人も同じプロジェクトで協業可能
+- **バージョン固定**: プロジェクトで使用するツールのバージョンを明示的に管理
+
+## 前提条件
+
+### DevContainerを使用する場合
+- Docker
+- Visual Studio Code + DevContainer拡張機能
+
+### DevContainerを使用しない場合
+- [mise](https://mise.jdx.dev/)のインストール
+- [Task](https://taskfile.dev/)のインストール ※ miseでインストールされます
+
+## セットアップ方法
+
+### DevContainerを使用する場合
+
+1. このリポジトリをクローン
+2. Visual Studio Codeで開く
+3. DevContainerで開くかの確認が出たら「Reopen in Container」を選択
+   (または F1キーを押して「Dev Containers: Reopen in Container」を選択)
+4. コンテナ内で自動的に`mise install`が実行され、必要なツールがセットアップされます
+
+### DevContainerを使用しない場合
+
+1. このリポジトリをクローン
+2. miseをインストール（[mise公式サイト](https://mise.jdx.dev/)参照）
+3. プロジェクトルートで以下を実行
+   ```bash
+   mise install  # .mise.tomlに指定されたツールをインストール
+   task setup    # セットアップタスクを実行
+   ```
+
+## プロジェクト構造
 
 ```
-
-- コンテナの起動時にプロジェクト内に必要なツールと biome が shims を使ってグローバルの node.js を参照している
-
-とりあえず以下を devcontainer.json に追記
-
+.
+├── .devcontainer/             # DevContainer設定
+│   ├── devcontainer.json      # DevContainer設定ファイル
+│   └── Dockerfile             # DevContainer用Dockerfile
+├── .mise.toml                 # mise設定ファイル
+├── Taskfile.yml               # タスク定義（プロジェクト全体）
+└── app/                       # アプリケーションコード
+    └── Taskfile.yml           # アプリケーション特有のタスク定義
 ```
-  "postCreateCommand": "mise install && mise use -g node@20.12.1",
+
+## 利用可能なタスク
+
+プロジェクトルートで以下のコマンドを実行すると、利用可能なタスク一覧が表示されます：
+
+```bash
+task
 ```
+
+### 主要なタスク
+
+- `task setup` - miseによる必要ツールのインストール
+- `task update` - miseで管理しているツールの更新
+- `task check` - mise設定の確認
+
+### アプリケーション特有のタスク
+
+- `task app:dev` - アプリケーション開発サーバーを起動
+- `task app:build` - アプリケーションをビルド
+- `task app:lint` - アプリケーションのリントを実行
+- `task app:test` - アプリケーションのテストを実行
+
+## mise.tomlについて
+
+`.mise.toml`ファイルには、プロジェクトで使用するツールのバージョンが指定されています。これにより、DevContainerを使っていても使っていなくても同じツールバージョンを使用できます。
+
+```toml
+[tools]
+node = "20.12.1"  # Node.jsのバージョン
+
+[env]
+NODE_ENV = "development"  # 環境変数設定
+```
+
+## なぜこのアプローチが良いのか？
+
+- **チーム内の一貫性**: DevContainer使用/不使用に関わらず同じツールバージョンを使用
+- **セットアップの簡素化**: `mise install`一発で必要なツールをインストール可能
+- **環境の移植性**: 異なるマシンでも同じ環境を簡単に再現可能
+- **タスクの標準化**: Taskfileによる共通タスクの提供
+- **ハイブリッド開発**: 開発者の好みや環境に応じた柔軟な開発スタイルをサポート
+
+## コントリビュート
+
+1. このリポジトリをフォーク
+2. 新しいブランチを作成 (`git checkout -b feature/amazing-feature`)
+3. 変更をコミット (`git commit -m 'Add amazing feature'`)
+4. ブランチをプッシュ (`git push origin feature/amazing-feature`)
+5. プルリクエストを作成

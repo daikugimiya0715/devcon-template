@@ -13,14 +13,12 @@ RUN install -dm 755 /etc/apt/keyrings \
     && apt-get update -y \
     && apt-get install -y mise
 
-# mise を使って gcloud をインストール
+# miseを使うので pluginをaddしないといけないものはここで追加
 RUN mise plugin add gcloud https://github.com/jthegedus/asdf-gcloud
 
-# 一旦カレントディレクトリを確認
-RUN pwd
 
 # PATHを通す
 RUN echo 'export PATH=$HOME/.local/share/mise/shims:$PATH' >> $HOME/.bashrc
 
-# 開発時に利用するポート（例: front:3000, back:8000）
+# 開発時に利用するポート（例: front-app:3000, back-app:8000 etc..）
 EXPOSE 3000 8000 5173

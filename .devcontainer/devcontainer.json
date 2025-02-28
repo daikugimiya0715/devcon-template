@@ -1,6 +1,6 @@
 // .devcontainer/devcontainer.json
 {
-  "name": "Unified Dev Container",
+  "name": "Sample Dev Container with mise",
 
   // docker build の文脈(context) を、今まさに VS Code で開いているフォルダ (カレントディレクトリ) にする
   "context": "..",
@@ -12,13 +12,7 @@
   // ここには統一すべき拡張機能をいれてください
   "customizations": {
     "vscode": {
-      "extensions": [
-        "biomejs.biome",
-        "charliermarsh.ruff",
-        "esbenp.prettier-vscode",
-        "ms-python.python",
-        "ms-azuretools.vscode-docker"
-      ]
+      "extensions": []
     }
   },
 

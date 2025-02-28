@@ -1,0 +1,12 @@
+version: '3'
+
+tasks:
+  default:
+    desc: アプリケーション内のタスクの一覧を表示
+    cmds:
+      - task --list
+  
+  hello:
+    desc: helloとターミナルに表示
+    cmds:
+      - echo "Hello, World! from app directory"  
