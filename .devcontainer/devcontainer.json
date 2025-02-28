@@ -9,6 +9,7 @@
   "dockerFile": "Dockerfile",
 
   // プロダクトに必要な拡張機能を指定
+  // ここには統一すべき拡張機能をいれてください
   "customizations": {
     "vscode": {
       "extensions": [
@@ -23,7 +24,7 @@
 
   // コンテナ作成時に実行したいコマンドを記述
   // mise install　mise use -g node@20.12.1 を実行
-  "postCreateCommand": "mise install && mise use -g node@20.12.1",
+  "postCreateCommand": "mise install",
 
   // コンテナにアタッチしたときに実行したいコマンドを記述
   "postAttachCommand": "",
