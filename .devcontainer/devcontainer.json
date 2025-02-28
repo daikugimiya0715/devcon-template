@@ -1,0 +1,38 @@
+// .devcontainer/devcontainer.json
+{
+  "name": "Unified Dev Container",
+
+  // docker build の文脈(context) を、今まさに VS Code で開いているフォルダ (カレントディレクトリ) にする
+  "context": "..",
+
+  // Dockerfile は .devcontainer フォルダにあるので相対パスで指定
+  "dockerFile": "Dockerfile",
+
+  // プロダクトに必要な拡張機能を指定
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "biomejs.biome",
+        "charliermarsh.ruff",
+        "esbenp.prettier-vscode",
+        "ms-python.python",
+        "ms-azuretools.vscode-docker"
+      ]
+    }
+  },
+
+  // コンテナ作成時に実行したいコマンドを記述
+  // mise install　mise use -g node@20.12.1 を実行
+  "postCreateCommand": "mise install && mise use -g node@20.12.1",
+
+  // コンテナにアタッチしたときに実行したいコマンドを記述
+  "postAttachCommand": "",
+
+  // コンテナ起動時に実行したいコマンドを記述
+  "postStartCommand": "",
+
+  // 開発で使うポートを必要に応じて指定
+  "forwardPorts": [3000, 8000, 5173],
+
+  "remoteUser": "root"
+}

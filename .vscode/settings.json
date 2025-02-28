@@ -1,0 +1,27 @@
+{
+  // 保存時の自動フォーマット＆コードアクション（自動修正）を有効化
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+
+  // front の TypeScript SDK（package.json の typescript を参照）へのパスを設定
+  "typescript.tsdk": "front/node_modules/typescript/lib",
+
+  // Python 向け設定
+  "python.analysis.typeCheckingMode": "basic",
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["tests"],
+
+  // ※ 以下は、各言語のフォーマッターが対応する VS Code 拡張を導入している場合の例です
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "biome.lspBin": "front/node_modules/.bin/biome"
+}
